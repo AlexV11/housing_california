@@ -1,4 +1,5 @@
 import numpy as np
+import joblib
 from sklearn.base import BaseEstimator, TransformerMixin
 
 rooms_ix, bedrooms_ix, population_ix, household_ix = 3, 4, 5, 6
