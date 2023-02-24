@@ -5,20 +5,23 @@ import prediction
 import joblib
 from combined_attributes_adder import CombinedAttributesAdder
 
-st.header('Housing predictions')
-st.write('This is a demo of a simple housing price prediction app')
+
+
+colh1, colh2 = st.columns(2)
+colh1.header('Housing predictions')
+colh2.image('California.jpg', width = 200)
 
 col1, col2 = st.columns(2)
 
-longitude = col1.number_input('Longitude', min_value = -124.0, max_value = -110.0, format = "%.2f")
-total_rooms = col1.number_input('Total rooms', min_value = 1.0, max_value = 50000.0, format = "%.0f")
-median_income = col1.number_input('Median income', min_value = 0.0, max_value = 17.0, format = "%.4f")
-households = col1.number_input('Households', min_value = 1.0, max_value = 10000.0, format = "%.0f")
-housing_median_age = col1.slider('Housing median age', step=1.0, min_value=1.0, max_value=100.0, value=0.0, format = "%.0f")
+longitude = col1.number_input('Longitude', value = -119.56, min_value = -124.0, max_value = -110.0, format = "%.2f")
+total_rooms = col1.number_input('Total rooms', value = 2635.0, min_value = 1.0, max_value = 50000.0, format = "%.0f")
+median_income = col1.number_input('Median income', value = 3.8706, min_value = 0.0, max_value = 17.0, format = "%.4f")
+households = col1.number_input('Households', value = 499.0, min_value = 1.0, max_value = 10000.0, format = "%.0f")
+housing_median_age = col1.slider('Housing median age', value = 28.0, step=1.0, min_value=1.0, max_value=100.0, format = "%.0f")
 
-latitude = col2.number_input('Latitude', min_value = 30.0, max_value = 50.0, format = "%.2f")
-total_bedrooms = col2.number_input('Total bedrooms', min_value = 1.0, max_value = 7000.0, format = "%.0f")
-population = col2.number_input('Population', min_value = 1.0, max_value = 50000.0, format = "%.0f")
+latitude = col2.number_input('Latitude', value = 35.63, min_value = 30.0, max_value = 50.0, format = "%.2f")
+total_bedrooms = col2.number_input('Total bedrooms', value = 537.0, min_value = 1.0, max_value = 7000.0, format = "%.0f")
+population = col2.number_input('Population', value = 1425.0, min_value = 1.0, max_value = 50000.0, format = "%.0f")
 ocean_proximity = col2.selectbox('Ocean proximity', ['<1H OCEAN', 'INLAND', 'NEAR OCEAN', 'NEAR BAY', 'ISLAND'])
 model = col2.radio(
     'Select the model to use:',
@@ -30,7 +33,8 @@ model = col2.radio(
     )
 )
 
-if st.button('Predict'):
+colr1, colr2 = st.columns(2)
+if colr1.button('Predict'):
     data = pd.DataFrame({
         'longitude': [longitude],
         'latitude': [latitude],
@@ -44,5 +48,12 @@ if st.button('Predict'):
     )
 
     result = prediction.predict(data, model)
-    # write the result but only 2 decimals
-    st.write('The predicted price is: ${:.2f}'.format(result[0]))
+    
+    colr1.write('The predicted price is: ${:.2f}'.format(result[0]))
+
+# do a dataframe with lat and long
+latlong = pd.DataFrame({
+    'longitude': [longitude],
+    'latitude': [latitude]
+})
+colr2.map(latlong, zoom = 7)
